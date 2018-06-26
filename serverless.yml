@@ -1,0 +1,91 @@
+service: todo # name of your application/service
+
+# All the information about the cloud service, it might change depending of which one we are using.
+provider:
+  name: aws # Specify Amazon Web Services
+  runtime: nodejs6.10 # Programming language plus version
+  iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "logs:CreateLogGroup"
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - "logs:CreateLogStream"
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - "logs:PutLogEvents"
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: "*"
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: "*"
+functions:
+  create:
+    handler: handler.create
+    events:
+      - http:
+          path: items
+          method: post
+          integration: lambda-proxy
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+
+  retrieve:
+    handler: handler.retrieve
+    events:
+      - http:
+          path: items/{id}
+          method: get
+          integration: lambda-proxy
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+
+  delete:
+    handler: handler.delete
+    events:
+      - http:
+          path: items-delete/{id}
+          method: delete
+          integration: lambda-proxy
+          cors:
+            origins:
+              - '*'
+            handlers:
+              - Content-Type
+              - X-Amz-Date
+
+  retrieveAll:
+    handler: handler.retrieveAll
+    events:
+      - http:
+          path: items-all
+          method: get
+          integration: lambda-proxy
+          cors:
+            origins:
+              - '*'
+            handlers:
+              - Content-Type
+              - X-Amz-Date
