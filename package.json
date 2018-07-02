@@ -1,13 +1,29 @@
 {
-  "name": "todo",
+  "name": "serverless_crud",
   "version": "1.0.0",
   "description": "",
-  "main": "handler-create.js",
-  "scripts": {
-    "test": "istanbul cover --config .istanbul.yml node_modules/.bin/_mocha -- tests/**/*.js --reporter nyan"
+  "main": "index.js",
+  "engine": {
+    "node": "6.10"
   },
+  "scripts": {
+<<<<<<< HEAD
+    "test": "istanbul cover --config .istanbul.yml node_modules/.bin/_mocha -- tests/**/*.js --reporter nyan"
+=======
+    "test": "istanbul cover --config .istanbul.yml node_modules/.bin/_mocha -- tests/**/*.js --reporter nyan",
+    "lint": "node ./node_modules/eslint/bin/eslint.js \"src/**/*.js\" \tests/**/*-test.js. --config=./.eslintrc.json",
+    "create": "cd src && sls create",
+    "clean": "cd src && sls remove",
+    "sandbox": "npm run lint && npm run test && npm run check-coverage && cd src && sls deploy --stage sandbox --region us-west-2",
+    "sandbox-only": "cd src && sls deploy --stage sandbox --region us-west-2",
+    "check-coverage": "istanbul check-coverage --config .istanbul.yml",
+    "deploy": "cd src && sls deploy"
+>>>>>>> f458408d4c2d26be42c78a64f64bb02a26dea1da
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
+<<<<<<< HEAD
   "dependencies": {
     "aws-sdk": "^2.263.1",
     "aws-sdk-mock": "^4.0.0",
@@ -16,5 +32,22 @@
     "mocha": "^5.2.0",
     "nock": "^9.3.3",
     "uuid-v4": "^0.1.0"
+=======
+  "devDependencies": {
+    "aws-sdk": "^2.6.15",
+    "aws-sdk-mock": "^4.0.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.8.1",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-security": "^1.2.0",
+    "fakeredis": "^1.0.3",
+    "istanbul": "^0.4.5",
+    "jscs": "^3.0.7",
+    "lambda-tester": "^2.6.0",
+    "mocha": "^3.1.2",
+    "nock": "^9.0.2",
+    "serverless": "1.0.3"
+>>>>>>> f458408d4c2d26be42c78a64f64bb02a26dea1da
   }
 }

@@ -3,7 +3,6 @@
 const aws = require('aws-sdk');
 const uuid = require('uuid-v4');
 
-const dynamoDb = new aws.DynamoDB.DocumentClient();
 const TableName = 'todoList-items';
 
 module.exports.hello = (event, context, callback) => {
@@ -33,7 +32,7 @@ module.exports.create = (event, context, callback) => {
     }
   };
 
-  dynamoDb.put({
+  new aws.DynamoDB.DocumentClient()({
     TableName,
     Item: newItem,
   }, (err) => (
@@ -48,7 +47,7 @@ module.exports.create = (event, context, callback) => {
 };
 
 module.exports.retrieve = (event, context, callback) => {
-  dynamoDb.get({
+  new aws.DynamoDB.DocumentClient().get({
     TableName,
     Key: {
       id: event.pathParameters.id,
@@ -69,7 +68,7 @@ module.exports.retrieve = (event, context, callback) => {
 };
 
 module.exports.delete = (event, context, callback) => {
-  dynamoDb.delete({
+  new aws.DynamoDB.DocumentClient().delete({
     TableName,
     Key: {
       id: event.pathParameters.id
@@ -91,7 +90,7 @@ module.exports.delete = (event, context, callback) => {
 };
 
 module.exports.retrieveAll = (event,context, callback) => {
-  dynamoDb.scan({
+  new aws.DynamoDB.DocumentClient().scan({
     TableName
   }, (err, response) => {
     if(err) {
