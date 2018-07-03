@@ -33,6 +33,7 @@ provider:
         Action:
           - "dynamodb:DeleteItem"
         Resource: "*"
+
 functions:
   create:
     handler: handler.create
@@ -63,7 +64,7 @@ functions:
               - X-Amz-Date
 
   delete:
-    handler: handler.delete
+    handler: handler.remove
     events:
       - http:
           path: items-delete/{id}

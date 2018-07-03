@@ -50,6 +50,47 @@ describe('retrieve tests', () => {
     });
   });
 
+  it('Should return a \'not item found\' message', (done) => {
+    event.pathParameters = {};
+
+    // adding the mock for documentClient.get
+    AWS.mock('DynamoDB.DocumentClient', 'get', (params, callback) => {
+      callback(null, {
+        // return mocked item to function
+        statusCode: 404,
+      });
+    });
+
+    retrieve(event, {}, (err, payload) => {
+      // validate response from service
+      expect(err).to.equals(null);
+      expect(payload.statusCode).to.equals(404);
+
+      const body = JSON.parse(payload.body);
+
+      expect(body).to.equals('Item not found');
+
+      done();
+    });
+  });
+
+  it('Should return an error message', (done) => {
+    event.pathParameters = {};
+
+    // adding the mock for documentClient.get
+    AWS.mock('DynamoDB.DocumentClient', 'get', (params, callback) => {
+      callback(new Error('mensaje de error.'));
+    });
+
+    retrieve(event, {}, (err, payload) => {
+      // validate response from service
+      expect(err).to.equals(null);
+      expect(payload.statusCode).to.equals(500);
+
+      done();
+    });
+  });
+
   // restore AWS after each test
   afterEach(() => (
     AWS.restore()
