@@ -19,12 +19,14 @@ module.exports.create = (event, context, callback) => {
   new aws.DynamoDB.DocumentClient().put({
     TableName,
     Item: newItem,
-  }, (err) => {
-    if (err) {
-      callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
-    } else {
-      callback(null, { statusCode: 201, body: JSON.stringify(newItem) });
-    }
+  }).promise()
+
+  .then(() => {
+    callback(null, { statusCode: 201, body: JSON.stringify(newItem) });
+  })
+
+  .catch((err) => {
+    callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
   });
 };
 
@@ -34,14 +36,18 @@ module.exports.retrieve = (event, context, callback) => {
     Key: {
       id: event.pathParameters.id,
     },
-  }, (err, result) => {
-    if (err) {
-      callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
-    } else if (!result.Item) {
+  }).promise()
+
+  .then((result) => {
+    if (!result.Item) {
       callback(null, { statusCode: 404, body: JSON.stringify('Item not found') });
     } else {
       callback(null, { statusCode: 200, body: JSON.stringify(result.Item) });
     }
+  })
+
+  .catch((err) => {
+    callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
   });
 };
 
@@ -52,25 +58,31 @@ module.exports.remove = (event, context, callback) => {
       id: event.pathParameters.id,
       //NumberRangeKey: 1
     },
-  }, (err, result) => {
-    if (err) {
-      callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
-    } else if (!result.Item) {
+  }).promise()
+
+  .then((result) => {
+    if (!result.Item) {
       callback(null, { statusCode: 404, body: JSON.stringify('Item not found') });
     } else {
       callback(null, { statusCode: 202, body: JSON.stringify('Accepted.') });
     }
+  })
+
+  .catch((err) => {
+    callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
   });
 };
 
 module.exports.retrieveAll = (event, context, callback) => {
   new aws.DynamoDB.DocumentClient().scan({
     TableName,
-  }, (err, response) => {
-    if (err) {
-      callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
-    } else {
-      callback(null, { statusCode: 200, body: JSON.stringify(response.Items) });
-    }
+  }).promise()
+
+  .then((result) => {
+    callback(null, { statusCode: 200, body: JSON.stringify(result.Items) });
+  })
+
+  .catch((err) => {
+    callback(null, { statusCode: 500, body: JSON.stringify(err.code) });
   });
 };
