@@ -30,8 +30,8 @@
     "fakeredis": "^1.0.3",
     "istanbul": "^0.4.5",
     "jscs": "^3.0.7",
-    "mocha": "^3.1.2",
+    "mocha": "^8.4.0",
     "nock": "^9.0.2",
-    "serverless": "1.0.3"
+    "serverless": "^2.40.0"
   }
 }
